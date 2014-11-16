@@ -1,0 +1,12 @@
+#PerfMetrics {
+  width: 400px;
+}
+
+.slider {
+  width: 90%;
+}
+
+table.months {
+  width: inherit;
+  margin-left: 6px;
+}
