@@ -19,8 +19,11 @@ $( document ).ready(function() {
     snap : true
   });
 
-  var ginView = false;
   var inView = false;
+  var ginView = false;
+  var sinView = false;
+  var cinView = false;
+  var pinView = false;
 
   $(window).scroll(function() {
       if (isScrolledIntoView('#PerfMetrics')) {
@@ -46,6 +49,16 @@ $( document ).ready(function() {
           //Get the context of the canvas element we want to select
           var prefCtx = document.getElementById("PerfChart").getContext("2d");
           var prefMetrics = new Chart(prefCtx).Radar(prefChart, {
+            // Boolean - If we want to override with a hard coded scale
+            scaleOverride: true,
+
+            // ** Required if scaleOverride is true **
+            // Number - The number of steps in a hard coded scale
+            scaleSteps: 5,
+            // Number - The value jump in the hard coded scale
+            scaleStepWidth: 1,
+            // Number - The scale starting value
+            scaleStartValue: 0,
             scaleShowLabels : true,
           });
 
@@ -64,42 +77,59 @@ $( document ).ready(function() {
           //new Chart(document.getElementById("canvas").getContext("2d")).Pie(data);
       }
 
-        else if (isScrolledIntoView('#Growth')) {
-          //console.log(isScrolledIntoView('#PerfMetrics'))
-          if (ginView) { return; }
-          ginView = true;
+      else if (isScrolledIntoView('#Growth')) {
+        //console.log(isScrolledIntoView('#PerfMetrics'))
+        if (ginView) { return; }
+        ginView = true;
+        var growthCtx = document.getElementById("Growth").getContext("2d");
+        var growthChart = new Chart(growthCtx).Line(growth, null);
+      }
 
-          var growthCtx = document.getElementById("Growth").getContext("2d");
-          var growthChart = new Chart(growthCtx).Line(growth, null);
-        }
+      else if (isScrolledIntoView('#StaffSize')) {
+        if (sinView) { return; }
+        sinView = true;
+        var staffCtx = document.getElementById("StaffSize").getContext("2d");
+        var staffChart = new Chart(staffCtx).Bar(staffSize, null);
+      }
+
+      else if (isScrolledIntoView('#Capitalization')) {
+        if (cinView) { return; }
+        cinView = true;
+        var capitalCtx = document.getElementById("Capitalization").getContext("2d");
+        var capitalChart = new Chart(capitalCtx).Line(capitalization, {
+          bezierCurve : false,
+        });
+      }
+
+      else if (isScrolledIntoView('#Pipeline')) {
+        if (pinView) { return; }
+        pinView = true;
+        var pipelineCtx = document.getElementById("Pipeline").getContext("2d");
+        var pipelineChart = new Chart(pipelineCtx).Line(pipeline, null);
+      }
+
     });
 
-    var staffCtx = document.getElementById("StaffSize").getContext("2d");
-    var staffChart = new Chart(staffCtx).Line(growth, null);
+    //var ipCtx = document.getElementById("IP").getContext("2d");
+    //var ipChart = new Chart(ipCtx).Line(ip, null);
 
-    var capitalCtx = document.getElementById("Capitalization").getContext("2d");
-    var capitalChart = new Chart(capitalCtx).Line(growth, null);
+    //var sphereCtx = document.getElementById("Sphere").getContext("2d");
+    //var sphereChart = new Chart(sphereCtx).Line(growth, null);
 
-    var ipCtx = document.getElementById("IP").getContext("2d");
-    var ipChart = new Chart(ipCtx).Line(growth, null);
+    //var centerCtx = document.getElementById("Center").getContext("2d");
+    //var centerChart = new Chart(centerCtx).Line(growth, null);
 
-    var pipelineCtx = document.getElementById("Pipeline").getContext("2d");
-    var pipelineChart = new Chart(pipelineCtx).Line(growth, null);
-
-    var sphereCtx = document.getElementById("Sphere").getContext("2d");
-    var sphereChart = new Chart(sphereCtx).Line(growth, null);
-
-    var centerCtx = document.getElementById("Center").getContext("2d");
-    var centerChart = new Chart(centerCtx).Line(growth, null);
-
-    var platformDevCtx = document.getElementById("PlatDev").getContext("2d");
-    var platformDevChart = new Chart(platformDevCtx).Line(growth, null);
+    //var platformDevCtx = document.getElementById("PlatDev").getContext("2d");
+    //var platformDevChart = new Chart(platformDevCtx).Line(growth, null);
 
 });
 
 var months = ["November","December","January","February","March","April"];
-var users = [10, 10, 50, 200, 300, 500];
-var revenue = [0, -10, 250, 400, 800, 900];
+var users = [0, 5, 20, 40, 80, 140];
+var revenue = [0, 0, 400, 800, 1600, 2800];
+var staffSizeData = [1, 1, 2, 2, 3, 3];
+var capitalData = [0, 0, 0, 0, 25000, 50000];
+var pipelineData = [ 20, 30, 60, 70, 140, 200];
 
 var growth = {
   labels : months,
@@ -121,23 +151,70 @@ var growth = {
   ]
 }
 
+var staffSize = {
+  labels : months,
+  datasets : [
+    {
+      fillColor : "rgba(151,187,205,0.5)",
+      strokeColor : "rgba(151,187,205,1)",
+      pointColor : "rgba(151,187,205,1)",
+      pointStrokeColor : "#fff",
+      data : staffSizeData 
+    }
+  ]
+}
+
+var capitalization = {
+  labels : months,
+  datasets : [
+    {
+      label : "capital",
+      fillColor : "rgba(151,187,205,0.5)",
+      strokeColor : "rgba(151,187,205,1)",
+      pointColor : "rgba(151,187,205,1)",
+      pointStrokeColor : "#fff",
+      data : capitalData
+    },
+    {
+      label : "score",
+      fillColor : "rgba(220,220,220,0.5)",
+      strokeColor : "rgba(220,220,220,1)",
+      pointColor : "rgba(220,220,220,1)",
+      pointStrokeColor : "#fff",
+      data : [1, 1, 1, 1, 2, 3] 
+    }
+  ]
+}
+
+var pipeline = {
+  labels : months,
+  datasets : [
+    {
+      fillColor : "rgba(151,187,205,0.5)",
+      strokeColor : "rgba(151,187,205,1)",
+      pointColor : "rgba(151,187,205,1)",
+      pointStrokeColor : "#fff",
+      data : pipelineData 
+    }
+  ]
+}
+
 var perfLabels = [
     "Staff Size",
     "Caplitalization",
-    "IP",
-    "Pipeline",
+    "Intellectual Property",
+    "Sales Pipeline",
     "Sphere of Influence",
-    "Centers of Influence",
     "Platform Development"
     ];
 
 var prefData = [
-  [5, 2, 1, 1, 1, 2, 1],
-  [4, 3, 2, 2, 1, 2, 1],
-  [4, 3, 2, 2, 1, 2, 3],
-  [3, 4, 3, 3, 3, 4, 3],
-  [4, 2, 3, 3, 3, 4, 3],
-  [4, 4, 5, 4, 5, 4, 5]
+  [1, 1, 3, 2, 3, 3],
+  [1, 1, 3, 2, 3, 3],
+  [3, 1, 3, 4, 4, 3],
+  [3, 1, 3, 4, 4, 4],
+  [5, 2, 3, 4, 4, 4],
+  [5, 3, 4, 5, 4, 5]
 ]
 
 var prefChart = {
