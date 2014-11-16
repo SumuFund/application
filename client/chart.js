@@ -1,29 +1,17 @@
+
+function isScrolledIntoView(elem)
+{
+    var docViewTop = $(window).scrollTop();
+    var docViewBottom = docViewTop + $(window).height();
+
+    var elemTop = $(elem).offset().top;
+    var elemBottom = elemTop + $(elem).height();
+
+    return ((elemTop <= docViewBottom) && (elemBottom >= docViewTop));
+}
+
 $( document ).ready(function() {
-  //Get the context of the canvas element we want to select
-  var growthCtx = document.getElementById("Growth").getContext("2d");
-  var growthChart = new Chart(growthCtx).Line(growth, null);
-
-  var prefCtx = document.getElementById("PerfChart").getContext("2d");
-  var prefMetrics = new Chart(prefCtx).Radar(prefChart, {
-    scaleShowLabels : true,
-    scaleOverride : false
-  });
-
-  var prefMetricsLength = prefMetrics.datasets[0].points.length;
-  var prefSlider = $("#PerfSlider")
-
-  function updatePrefGraph (sliderVal) {
-    console.log("Updating!");
-    console.log(sliderVal);
-    for (var i = 0; i < prefMetricsLength; i++) {
-      prefMetrics.datasets[0].points[i].value = prefData[sliderVal - 1][i];
-    }
-    prefMetrics.update();
-  }
-
-  function animateSlider(val) {
-      prefSlider.simpleSlider("setValue", val);
-  }
+  var prefSlider = $("#PerfSlider");
 
   prefSlider.simpleSlider({
     range : [1,6],
@@ -31,20 +19,84 @@ $( document ).ready(function() {
     snap : true
   });
 
-  prefSlider.bind("slider:changed", function (event, data) {
-    updatePrefGraph(data.value);
-  });
+  var ginView = false;
+  var inView = false;
 
-  var animateCounter = 0;
+  $(window).scroll(function() {
+      if (isScrolledIntoView('#PerfMetrics')) {
+          //console.log(isScrolledIntoView('#PerfMetrics'))
+          if (inView) { return; }
+          inView = true;
 
-  var interval = setInterval(function() {
-    animateSlider(animateCounter);
-    animateCounter++;
-    if(animateCounter === 7) {
-      clearInterval(interval);
-    }
-  }, 300);
+          function updatePrefGraph (sliderVal) {
+            for (var i = 0; i < prefMetricsLength; i++) {
+              prefMetrics.datasets[0].points[i].value = prefData[sliderVal - 1][i];
+            }
+            prefMetrics.update();
+          }
+
+          function animateSlider(val) {
+            prefSlider.simpleSlider("setValue", val);
+          }
+
+          prefSlider.bind("slider:changed", function (event, data) {
+            updatePrefGraph(data.value);
+          });
+
+          //Get the context of the canvas element we want to select
+          var prefCtx = document.getElementById("PerfChart").getContext("2d");
+          var prefMetrics = new Chart(prefCtx).Radar(prefChart, {
+            scaleShowLabels : true,
+          });
+
+          var prefMetricsLength = prefMetrics.datasets[0].points.length;
+
+          var animateCounter = 0;
+
+          var interval = setInterval(function() {
+            animateSlider(animateCounter);
+            animateCounter++;
+            if(animateCounter === 7) {
+              clearInterval(interval);
+            }
+          }, 300);
+
+          //new Chart(document.getElementById("canvas").getContext("2d")).Pie(data);
+      }
+
+        else if (isScrolledIntoView('#Growth')) {
+          //console.log(isScrolledIntoView('#PerfMetrics'))
+          if (ginView) { return; }
+          ginView = true;
+
+          var growthCtx = document.getElementById("Growth").getContext("2d");
+          var growthChart = new Chart(growthCtx).Line(growth, null);
+        }
+    });
+
+    var staffCtx = document.getElementById("StaffSize").getContext("2d");
+    var staffChart = new Chart(staffCtx).Line(growth, null);
+
+    var capitalCtx = document.getElementById("Capitalization").getContext("2d");
+    var capitalChart = new Chart(capitalCtx).Line(growth, null);
+
+    var ipCtx = document.getElementById("IP").getContext("2d");
+    var ipChart = new Chart(ipCtx).Line(growth, null);
+
+    var pipelineCtx = document.getElementById("Pipeline").getContext("2d");
+    var pipelineChart = new Chart(pipelineCtx).Line(growth, null);
+
+    var sphereCtx = document.getElementById("Sphere").getContext("2d");
+    var sphereChart = new Chart(sphereCtx).Line(growth, null);
+
+    var centerCtx = document.getElementById("Center").getContext("2d");
+    var centerChart = new Chart(centerCtx).Line(growth, null);
+
+    var platformDevCtx = document.getElementById("PlatDev").getContext("2d");
+    var platformDevChart = new Chart(platformDevCtx).Line(growth, null);
+
 });
+
 var months = ["November","December","January","February","March","April"];
 var users = [10, 10, 50, 200, 300, 500];
 var revenue = [0, -10, 250, 400, 800, 900];
