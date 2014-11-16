@@ -11,6 +11,13 @@ function isScrolledIntoView(elem)
 }
 
 $( document ).ready(function() {
+  //Chart.defaults.global = {
+  //  scaleFontFamily : "'Montserrat', sans serif"
+  //}
+  Chart.defaults.global.scaleFontFamily = "Montserrat";
+  Chart.defaults.global.tooltipFontFamily = "Montserrat";
+  Chart.defaults.global.tooltipTitleFontFamily = "Montserrat";
+
   var prefSlider = $("#PerfSlider");
 
   prefSlider.simpleSlider({
@@ -45,6 +52,7 @@ $( document ).ready(function() {
   var prefMetrics = new Chart(prefCtx).Radar(prefChart, {
     // Boolean - If we want to override with a hard coded scale
     scaleOverride: true,
+    pointLabelFontFamily : "Montserrat",
 
     // ** Required if scaleOverride is true **
     // Number - The number of steps in a hard coded scale
@@ -126,16 +134,16 @@ var growth = {
   labels : months,
   datasets : [
     {
-      fillColor : "rgba(220,220,220,0.5)",
-      strokeColor : "rgba(220,220,220,1)",
-      pointColor : "rgba(220,220,220,1)",
+      fillColor : "rgba(68,67,65,0.5)",
+      strokeColor : "rgba(68,67,65,1)",
+      pointColor : "rgba(68,67,65,1)",
       pointStrokeColor : "#fff",
       data : revenue
     },
     {
-      fillColor : "rgba(151,187,205,0.5)",
-      strokeColor : "rgba(151,187,205,1)",
-      pointColor : "rgba(151,187,205,1)",
+      fillColor : "rgba(33,54,108,0.5)",
+      strokeColor : "rgba(33,54,108,1)",
+      pointColor : "rgba(33,54,108,1)",
       pointStrokeColor : "#fff",
       data : users
     }
@@ -146,9 +154,9 @@ var staffSize = {
   labels : months,
   datasets : [
     {
-      fillColor : "rgba(151,187,205,0.5)",
-      strokeColor : "rgba(151,187,205,1)",
-      pointColor : "rgba(151,187,205,1)",
+      fillColor : "rgba(33,54,108,0.5)",
+      strokeColor : "rgba(33,54,108,1)",
+      pointColor : "rgba(33,54,108,1)",
       pointStrokeColor : "#fff",
       data : staffSizeData 
     }
@@ -160,17 +168,17 @@ var capitalization = {
   datasets : [
     {
       label : "capital",
-      fillColor : "rgba(151,187,205,0.5)",
-      strokeColor : "rgba(151,187,205,1)",
-      pointColor : "rgba(151,187,205,1)",
+      fillColor : "rgba(33,54,108,0.5)",
+      strokeColor : "rgba(33,54,108,1)",
+      pointColor : "rgba(33,54,108,1)",
       pointStrokeColor : "#fff",
       data : capitalData
     },
     {
       label : "score",
-      fillColor : "rgba(220,220,220,0.5)",
-      strokeColor : "rgba(220,220,220,1)",
-      pointColor : "rgba(220,220,220,1)",
+      fillColor : "rgba(68,67,65,0.5)",
+      strokeColor : "rgba(68,67,65,1)",
+      pointColor : "rgba(68,67,65,1)",
       pointStrokeColor : "#fff",
       data : [1, 1, 1, 1, 2, 3] 
     }
@@ -181,9 +189,9 @@ var pipeline = {
   labels : months,
   datasets : [
     {
-      fillColor : "rgba(151,187,205,0.5)",
-      strokeColor : "rgba(151,187,205,1)",
-      pointColor : "rgba(151,187,205,1)",
+      fillColor : "rgba(33,54,108,0.5)",
+      strokeColor : "rgba(33,54,108,1)",
+      pointColor : "rgba(33,54,108,1)",
       pointStrokeColor : "#fff",
       data : pipelineData 
     }
@@ -212,12 +220,12 @@ var prefChart = {
   labels: perfLabels,
   datasets: [
     {
-      fillColor: "rgba(151,187,205,0.2)",
-      strokeColor: "rgba(151,187,205,1)",
-      pointColor: "rgba(151,187,205,1)",
+      fillColor: "rgba(33,54,108,0.2)",
+      strokeColor: "rgba(33,54,108,1)",
+      pointColor: "#c09551",
       pointStrokeColor: "#fff",
       pointHighlightFill: "#fff",
-      pointHighlightStroke: "rgba(151,187,205,1)",
+      pointHighlightStroke: "rgba(33,54,108,1)",
       data: prefData[0]
     },
   ]
