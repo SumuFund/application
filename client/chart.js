@@ -25,60 +25,51 @@ $( document ).ready(function() {
   var cinView = false;
   var pinView = false;
 
+  function updatePrefGraph (sliderVal) {
+    for (var i = 0; i < prefMetricsLength; i++) {
+      prefMetrics.datasets[0].points[i].value = prefData[sliderVal - 1][i];
+    }
+    prefMetrics.update();
+  }
+
+  function animateSlider(val) {
+    prefSlider.simpleSlider("setValue", val);
+  }
+
+  prefSlider.bind("slider:changed", function (event, data) {
+    updatePrefGraph(data.value);
+  });
+
+  //Get the context of the canvas element we want to select
+  var prefCtx = document.getElementById("PerfChart").getContext("2d");
+  var prefMetrics = new Chart(prefCtx).Radar(prefChart, {
+    // Boolean - If we want to override with a hard coded scale
+    scaleOverride: true,
+
+    // ** Required if scaleOverride is true **
+    // Number - The number of steps in a hard coded scale
+    scaleSteps: 5,
+    // Number - The value jump in the hard coded scale
+    scaleStepWidth: 1,
+    // Number - The scale starting value
+    scaleStartValue: 0,
+    scaleShowLabels : true,
+  });
+
+  var prefMetricsLength = prefMetrics.datasets[0].points.length;
+
+  var animateCounter = 0;
+
+  var interval = setInterval(function() {
+    animateSlider(animateCounter);
+    animateCounter++;
+    if(animateCounter === 7) {
+      clearInterval(interval);
+    }
+  }, 300);
+
   $(window).scroll(function() {
-      if (isScrolledIntoView('#PerfMetrics')) {
-          //console.log(isScrolledIntoView('#PerfMetrics'))
-          if (inView) { return; }
-          inView = true;
-
-          function updatePrefGraph (sliderVal) {
-            for (var i = 0; i < prefMetricsLength; i++) {
-              prefMetrics.datasets[0].points[i].value = prefData[sliderVal - 1][i];
-            }
-            prefMetrics.update();
-          }
-
-          function animateSlider(val) {
-            prefSlider.simpleSlider("setValue", val);
-          }
-
-          prefSlider.bind("slider:changed", function (event, data) {
-            updatePrefGraph(data.value);
-          });
-
-          //Get the context of the canvas element we want to select
-          var prefCtx = document.getElementById("PerfChart").getContext("2d");
-          var prefMetrics = new Chart(prefCtx).Radar(prefChart, {
-            // Boolean - If we want to override with a hard coded scale
-            scaleOverride: true,
-
-            // ** Required if scaleOverride is true **
-            // Number - The number of steps in a hard coded scale
-            scaleSteps: 5,
-            // Number - The value jump in the hard coded scale
-            scaleStepWidth: 1,
-            // Number - The scale starting value
-            scaleStartValue: 0,
-            scaleShowLabels : true,
-          });
-
-          var prefMetricsLength = prefMetrics.datasets[0].points.length;
-
-          var animateCounter = 0;
-
-          var interval = setInterval(function() {
-            animateSlider(animateCounter);
-            animateCounter++;
-            if(animateCounter === 7) {
-              clearInterval(interval);
-            }
-          }, 300);
-
-          //new Chart(document.getElementById("canvas").getContext("2d")).Pie(data);
-      }
-
-      else if (isScrolledIntoView('#Growth')) {
-        //console.log(isScrolledIntoView('#PerfMetrics'))
+      if (isScrolledIntoView('#Growth')) {
         if (ginView) { return; }
         ginView = true;
         var growthCtx = document.getElementById("Growth").getContext("2d");
